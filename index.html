@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espacios Invisibles · Ondas 1925–1939</title>
+  <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0a0a0a;
+      --dark:  #111111;
+      --card:  #1a1a1a;
+      --gold:  #c9a84c;
+      --gold2: #e8c97a;
+      --text:  #e8e8e8;
+      --muted: #9a9a9a;
+      --white: #ffffff;
+      --serif: 'Georgia', 'Times New Roman', serif;
+      --sans:  'Helvetica Neue', Arial, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: var(--sans);
+      overflow-x: hidden;
+    }
+
+    /* ── Progress bar ── */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      width: 0%;
+      background: var(--gold);
+      z-index: 1000;
+      transition: width 0.15s ease;
+    }
+
+    /* ── Top nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 900;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 32px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      pointer-events: all;
+    }
+
+    .nav-logo {
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-family: var(--sans);
+    }
+
+    .nav-sep { color: var(--gold); opacity: 0.5; }
+
+    .nav-title {
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-family: var(--sans);
+    }
+
+    /* ── Slide nav dots ── */
+    #slide-nav {
+      position: fixed;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 800;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: all;
+    }
+
+    .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+    }
+
+    .dot.active {
+      background: var(--gold);
+      transform: scale(1.5);
+    }
+
+    .dot:hover { background: rgba(255,255,255,0.6); }
+
+    /* ── Sections ── */
+    section {
+      scroll-snap-align: start;
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      overflow: hidden;
+      background: var(--black);
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('images/CABECERA.webp');
+      background-size: cover;
+      background-position: center 30%;
+      filter: brightness(0.38) saturate(0.7);
+      transform: scale(1.04);
+      transition: transform 8s ease;
+    }
+
+    #hero:hover .hero-bg { transform: scale(1); }
+
+    .hero-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        160deg,
+        rgba(0,0,0,0.1) 0%,
+        rgba(0,0,0,0.0) 40%,
+        rgba(10,10,10,0.9) 85%,
+        var(--black) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 760px;
+      padding: 80px 48px 60px;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+      opacity: 0.9;
+    }
+
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 400;
+      line-height: 1.05;
+      color: var(--white);
+      margin-bottom: 32px;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold2);
+    }
+
+    .hero-subtitle {
+      font-size: 15px;
+      line-height: 1.75;
+      color: rgba(232,232,232,0.75);
+      max-width: 520px;
+      margin: 0 auto 48px;
+      font-family: var(--serif);
+      font-style: italic;
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .hero-meta span { display: flex; align-items: center; gap: 6px; }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      animation: fadeInUp 2s ease 1.5s both;
+    }
+
+    .scroll-arrow {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, transparent, var(--gold));
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollLine {
+      0%, 100% { transform: scaleY(0.3); opacity: 0.4; transform-origin: top; }
+      50% { transform: scaleY(1); opacity: 1; transform-origin: top; }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    /* ── Intro text section ── */
+    #intro {
+      background: var(--dark);
+      justify-content: flex-start;
+      align-items: stretch;
+    }
+
+    .intro-inner {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+    }
+
+    .intro-image-col {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .intro-image-col img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(0.65) saturate(0.8);
+    }
+
+    .intro-image-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, transparent 60%, var(--dark) 100%);
+    }
+
+    .intro-text-col {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 64px 80px 48px;
+    }
+
+    .section-number {
+      font-size: 9px;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+      opacity: 0.8;
+    }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 32px;
+      border-left: 2px solid var(--gold);
+      padding-left: 16px;
+    }
+
+    .section-heading {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--white);
+      margin-bottom: 28px;
+      letter-spacing: -0.01em;
+    }
+
+    .section-body {
+      font-family: var(--serif);
+      font-size: 15.5px;
+      line-height: 1.85;
+      color: rgba(232,232,232,0.78);
+      max-width: 520px;
+    }
+
+    .section-body p + p { margin-top: 18px; }
+
+    /* ── Image full-screen slides ── */
+    .slide {
+      background: var(--black);
+      overflow: hidden;
+      flex-direction: column;
+    }
+
+    .slide-inner {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      display: grid;
+    }
+
+    /* Layout A: image left, text right */
+    .slide-inner.layout-a {
+      grid-template-columns: 58% 42%;
+    }
+
+    /* Layout B: image right, text left */
+    .slide-inner.layout-b {
+      grid-template-columns: 42% 58%;
+    }
+
+    /* Layout C: full image with overlay text */
+    .slide-inner.layout-c {
+      grid-template-columns: 1fr;
+    }
+
+    .slide-image {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide-image img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 10s ease;
+    }
+
+    .slide:hover .slide-image img { transform: scale(1.04); }
+
+    .slide-image-vignette {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.0) 50%);
+    }
+
+    /* For layout-b, gradient goes the other way */
+    .layout-b .slide-image-vignette {
+      background: linear-gradient(-135deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.0) 50%);
+    }
+
+    .slide-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 72px 56px;
+      background: var(--card);
+      position: relative;
+    }
+
+    /* For layout-b, text is first child */
+    .layout-b .slide-text {
+      order: -1;
+      background: var(--dark);
+    }
+
+    .slide-date {
+      font-size: 9px;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .slide-num {
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .slide-title {
+      font-family: var(--serif);
+      font-size: clamp(1.4rem, 2.2vw, 2.2rem);
+      font-weight: 400;
+      line-height: 1.25;
+      color: var(--white);
+      margin-bottom: 24px;
+    }
+
+    .slide-body {
+      font-family: var(--serif);
+      font-size: 14.5px;
+      line-height: 1.85;
+      color: rgba(232,232,232,0.72);
+      max-width: 440px;
+    }
+
+    .slide-body p + p { margin-top: 14px; }
+
+    .slide-caption {
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .slide-caption-img {
+      width: 36px; height: 36px;
+      border-radius: 2px;
+      object-fit: cover;
+      opacity: 0.6;
+      flex-shrink: 0;
+    }
+
+    .slide-caption-text {
+      font-size: 10px;
+      color: var(--muted);
+      line-height: 1.5;
+      font-style: italic;
+    }
+
+    /* ── Full-bleed layout for 005 (illustration) ── */
+    .slide-inner.layout-c .slide-image {
+      min-height: 100vh;
+    }
+
+    .slide-inner.layout-c .slide-image img {
+      filter: brightness(0.45) saturate(0.7);
+    }
+
+    .slide-inner.layout-c .slide-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(10,10,10,0.78);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: 2px;
+      max-width: 600px;
+      width: 90%;
+      padding: 56px 48px;
+    }
+
+    .slide-inner.layout-c .slide-body { max-width: 100%; }
+
+    /* ── Footer / Coda section ── */
+    #coda {
+      background: var(--dark);
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .coda-inner {
+      text-align: center;
+      padding: 80px 48px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .coda-icon {
+      font-size: 32px;
+      margin-bottom: 32px;
+      opacity: 0.6;
+    }
+
+    .coda-title {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 24px;
+      line-height: 1.2;
+    }
+
+    .coda-body {
+      font-family: var(--serif);
+      font-size: 15px;
+      line-height: 1.8;
+      color: rgba(232,232,232,0.7);
+      margin-bottom: 40px;
+    }
+
+    .coda-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      transition: all 0.25s ease;
+    }
+
+    .coda-link:hover {
+      background: var(--gold);
+      color: var(--black);
+    }
+
+    .coda-link svg { width: 14px; height: 14px; }
+
+    /* ── Credits ── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 40px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .footer-left {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .footer-left strong {
+      display: block;
+      color: var(--gold);
+      margin-bottom: 4px;
+      letter-spacing: 0.3em;
+    }
+
+    .footer-right {
+      font-size: 10px;
+      color: var(--muted);
+      text-align: right;
+      line-height: 1.8;
+    }
+
+    /* ── Animated entrance ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.35s; }
+    .reveal-delay-4 { transition-delay: 0.5s; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .intro-inner,
+      .slide-inner.layout-a,
+      .slide-inner.layout-b {
+        grid-template-columns: 1fr;
+      }
+
+      .intro-image-col { min-height: 40vh; }
+      .slide-image { min-height: 45vh; }
+
+      .layout-b .slide-text { order: unset; }
+
+      .slide-text,
+      .intro-text-col {
+        padding: 48px 28px;
+      }
+
+      .slide-inner.layout-c .slide-text {
+        position: relative;
+        top: auto; left: auto;
+        transform: none;
+        width: 100%;
+        border-radius: 0;
+      }
+
+      nav { padding: 14px 20px; }
+      #slide-nav { display: none; }
+      .hero-content { padding: 80px 24px 60px; }
+      footer { flex-direction: column; }
+      .footer-right { text-align: left; }
+    }
+
+    /* ── Gold line decoration ── */
+    .gold-line {
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      margin: 20px 0;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-brand">
+    <span class="nav-logo">Ondas · 1925–1939</span>
+    <span class="nav-sep">—</span>
+    <span class="nav-title">Itinerario 1</span>
+  </div>
+</nav>
+
+<!-- Dot navigation -->
+<div id="slide-nav">
+  <div class="dot active" data-target="hero"     title="Inicio"></div>
+  <div class="dot"        data-target="intro"    title="Estudios radiofónicos"></div>
+  <div class="dot"        data-target="slide-001" title="Unión Radio, 1930"></div>
+  <div class="dot"        data-target="slide-002" title="Radio Sevilla, 1927"></div>
+  <div class="dot"        data-target="slide-003" title="Barcelona, 1927"></div>
+  <div class="dot"        data-target="slide-004" title="Broadcasting House, 1933"></div>
+  <div class="dot"        data-target="slide-005" title="Augusto, 1932"></div>
+  <div class="dot"        data-target="slide-006" title="Radio Sevilla, 1935"></div>
+  <div class="dot"        data-target="slide-007" title="Nueva York, 1935"></div>
+  <div class="dot"        data-target="coda"     title="Explorar más"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     HERO
+══════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-gradient"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow reveal">Itinerario 1 · Exposición Ondas</p>
+    <h1 class="hero-title reveal reveal-delay-1">
+      Espacios<br><em>Invisibles</em>
+    </h1>
+    <p class="hero-subtitle reveal reveal-delay-2">
+      Los nuevos espacios de la radio, inicialmente inmateriales e invisibles,
+      se hacen visibles a través de las fotografías publicadas en <em>Ondas</em>.
+    </p>
+    <div class="hero-meta reveal reveal-delay-3">
+      <span>1925 — 1939</span>
+      <span>·</span>
+      <span>Revista Ondas</span>
+      <span>·</span>
+      <span>8 imágenes</span>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-arrow"></div>
+    <span>Desplaza</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     000 — INTRO
+══════════════════════════════════════════ -->
+<section id="intro">
+  <div class="intro-inner">
+    <div class="intro-image-col">
+      <img src="images/000.webp"
+           alt="Nueva Planta estudios Radio Barcelona, 1934">
+      <div class="intro-image-overlay"></div>
+    </div>
+
+    <div class="intro-text-col">
+      <p class="section-number reveal">000</p>
+      <p class="section-label reveal reveal-delay-1">Estudios radiofónicos</p>
+      <h2 class="section-heading reveal reveal-delay-2">
+        El sonido<br>toma forma
+      </h2>
+      <span class="gold-line reveal reveal-delay-2"></span>
+      <div class="section-body reveal reveal-delay-3">
+        <p>
+          Los nuevos espacios de la radio, inicialmente inmateriales e invisibles,
+          se hacen visibles a través de las numerosas fotografías publicadas en
+          <em>Ondas</em>.
+        </p>
+        <p>
+          Las fotografías muestran de forma recurrente interiores reconocibles:
+          atriles, micrófonos y, en el centro de la escena, instrumentos musicales
+          como pianos, pianolas o guitarras.
+        </p>
+        <p>
+          Estos elementos funcionan como anclajes visuales que traducen el sonido
+          en imagen y permiten imaginar el lugar desde el que la radio emite la música.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     001 — Unión Radio / Arbós (1930)
+══════════════════════════════════════════ -->
+<section id="slide-001" class="slide">
+  <div class="slide-inner layout-a">
+    <div class="slide-image">
+      <img src="images/001.webp"
+           alt="Gran Orquesta Sinfónica de Unión Radio dirigida por Arbós, 1930">
+      <div class="slide-image-vignette"></div>
+    </div>
+
+    <div class="slide-text">
+      <p class="slide-num reveal">001</p>
+      <p class="slide-date reveal">22 de febrero de 1930</p>
+      <h2 class="slide-title reveal reveal-delay-1">
+        Estudio de Unión Radio
+      </h2>
+      <span class="gold-line reveal reveal-delay-1"></span>
+      <div class="slide-body reveal reveal-delay-2">
+        <p>
+          Abrimos este itinerario de espacios invisibles con el estudio de Unión Radio,
+          espacio mítico de la emisora central en la revista <em>Ondas</em>.
+        </p>
+        <p>
+          En esta ocasión aparece repleto de músicos: la orquesta de Unión Radio
+          dirigida por Arbós. La imagen «suena» y revela lo central que era la música
+          en directo en estos primeros espacios radiofónicos.
+        </p>
+      </div>
+      <div class="slide-caption reveal reveal-delay-3">
+        <div class="slide-caption-text">
+          Orquesta Sinfónica de Unión Radio · <em>Ondas</em>, 22 feb. 1930
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     002 — Radio Sevilla (1927)
+══════════════════════════════════════════ -->
+<section id="slide-002" class="slide">
+  <div class="slide-inner layout-b">
+    <div class="slide-image">
+      <img src="images/002.webp"
+           alt="Estudio de Radio Sevilla, 1927">
+      <div class="slide-image-vignette"></div>
+    </div>
+
+    <div class="slide-text">
+      <p class="slide-num reveal">002</p>
+      <p class="slide-date reveal">1 de enero de 1927</p>
+      <h2 class="slide-title reveal reveal-delay-1">
+        Estudio de Radio Sevilla
+      </h2>
+      <span class="gold-line reveal reveal-delay-1"></span>
+      <div class="slide-body reveal reveal-delay-2">
+        <p>
+          Con mantones en los atriles, dando el toque local. Estudio cuidado
+          en los pequeños detalles, mostrando las emisoras locales en esa nueva
+          idea de globalidad que aparece en la radio en estos primeros años.
+        </p>
+      </div>
+      <div class="slide-caption reveal reveal-delay-3">
+        <div class="slide-caption-text">
+          Estudio de Unión Radio Sevilla · <em>Ondas</em>, 1 ene. 1927
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     003 — Barcelona (1927)
+══════════════════════════════════════════ -->
+<section id="slide-003" class="slide">
+  <div class="slide-inner layout-a">
+    <div class="slide-image">
+      <img src="images/003.webp"
+           alt="Nuevo Estudio en Barcelona, 1927">
+      <div class="slide-image-vignette"></div>
+    </div>
+
+    <div class="slide-text">
+      <p class="slide-num reveal">003</p>
+      <p class="slide-date reveal">11 de septiembre de 1927</p>
+      <h2 class="slide-title reveal reveal-delay-1">
+        Modernos estudios de Barcelona
+      </h2>
+      <span class="gold-line reveal reveal-delay-1"></span>
+      <div class="slide-body reveal reveal-delay-2">
+        <p>
+          Espacios diáfanos, líneas elegantes. Largas cortinas que caen del
+          techo para separar los distintos lugares.
+        </p>
+        <p>
+          Y como siempre, un piano de cola presidiendo el estudio radiofónico,
+          centro de una programación donde la música en vivo era protagonista
+          indiscutible.
+        </p>
+      </div>
+      <div class="slide-caption reveal reveal-delay-3">
+        <div class="slide-caption-text">
+          Modernos estudios de Barcelona · <em>Ondas</em>, 11 sep. 1927
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     004 — Broadcasting House (1933)
+══════════════════════════════════════════ -->
+<section id="slide-004" class="slide">
+  <div class="slide-inner layout-b">
+    <div class="slide-image">
+      <img src="images/004.webp"
+           alt="Estudio de Broadcasting House, 1933">
+      <div class="slide-image-vignette"></div>
+    </div>
+
+    <div class="slide-text">
+      <p class="slide-num reveal">004</p>
+      <p class="slide-date reveal">12 de agosto de 1933</p>
+      <h2 class="slide-title reveal reveal-delay-1">
+        Broadcasting House
+      </h2>
+      <span class="gold-line reveal reveal-delay-1"></span>
+      <div class="slide-body reveal reveal-delay-2">
+        <p>
+          En la revista no solo encontramos estudios españoles, sino que la
+          iconografía se convierte en testimonio de una globalización emergente.
+        </p>
+        <p>
+          Frente a los pequeños estudios de radios locales, la revista <em>Ondas</em>
+          nos acerca a modernos, elegantes y amplios estudios internacionales como
+          el de Broadcasting House. Espacios que parecen más salas de conciertos
+          de cámara que estudios radiofónicos.
+        </p>
+        <p>
+          A través de <em>Ondas</em>, el lector podía imaginar y viajar a estos
+          nuevos espacios tecnológicos para la música.
+        </p>
+      </div>
+      <div class="slide-caption reveal reveal-delay-3">
+        <div class="slide-caption-text">
+          Estudio de la BBC Broadcasting House, Londres · <em>Ondas</em>, 12 ago. 1933
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     005 — Augusto / British Broadcasting (1932) — full bleed
+══════════════════════════════════════════ -->
+<section id="slide-005" class="slide">
+  <div class="slide-inner layout-c">
+    <div class="slide-image">
+      <img src="images/005.webp"
+           alt="Estudio de radio, ilustración de Augusto, 1932">
+      <div class="slide-image-vignette"></div>
+    </div>
+
+    <div class="slide-text">
+      <p class="slide-num reveal">005</p>
+      <p class="slide-date reveal">3 de septiembre de 1932</p>
+      <h2 class="slide-title reveal reveal-delay-1">
+        British Broadcasting
+      </h2>
+      <span class="gold-line reveal reveal-delay-1"></span>
+      <div class="slide-body reveal reveal-delay-2">
+        <p>
+          También los grandes dibujantes de la época narran artísticamente estos
+          nuevos espacios en la sombra, mostrando esa doble escucha musical:
+          el radioyente y el oyente que iba al estudio, transformado en una
+          auténtica sala de espectáculos.
+        </p>
+        <p>
+          La dualidad del estudio ante la doble escucha pública y radiofónica,
+          enorme novedad tecnológica de la época.
+        </p>
+      </div>
+      <div class="slide-caption reveal reveal-delay-3">
+        <div class="slide-caption-text">
+          Ilustración de Augusto · <em>Ondas</em>, 3 sep. 1932
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     006 — Nuevo Radio Sevilla (1935)
+══════════════════════════════════════════ -->
+<section id="slide-006" class="slide">
+  <div class="slide-inner layout-a">
+    <div class="slide-image">
+      <img src="images/006.webp"
+           alt="Nuevo estudio Radio Sevilla, 1935">
+      <div class="slide-image-vignette"></div>
+    </div>
+
+    <div class="slide-text">
+      <p class="slide-num reveal">006</p>
+      <p class="slide-date reveal">20 de julio de 1935</p>
+      <h2 class="slide-title reveal reveal-delay-1">
+        Nuevo estudio Radio Sevilla
+      </h2>
+      <span class="gold-line reveal reveal-delay-1"></span>
+      <div class="slide-body reveal reveal-delay-2">
+        <p>
+          A partir de los años 30 vemos cómo los estudios de radio se abren
+          hacia líneas mucho más minimalistas y modernas.
+        </p>
+        <p>
+          Si en 1927 veíamos la fotografía de Radio Sevilla desde el color local
+          con mantones en los atriles, en 1935 aparece en <em>Ondas</em> un estudio
+          con líneas más austeras y modernas.
+        </p>
+        <p>
+          En ambos, de nuevo, el piano sigue siendo el gran protagonista de las fotografías.
+        </p>
+      </div>
+      <div class="slide-caption reveal reveal-delay-3">
+        <div class="slide-caption-text">
+          Nuevo estudio de Radio Sevilla · <em>Ondas</em>, 20 jul. 1935
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     007 — National Broadcasting Company, Nueva York (1935)
+══════════════════════════════════════════ -->
+<section id="slide-007" class="slide">
+  <div class="slide-inner layout-b">
+    <div class="slide-image">
+      <img src="images/007.png"
+           alt="Estudio National Broadcasting Company, Nueva York, 1935">
+      <div class="slide-image-vignette"></div>
+    </div>
+
+    <div class="slide-text">
+      <p class="slide-num reveal">007</p>
+      <p class="slide-date reveal">24 de agosto de 1935</p>
+      <h2 class="slide-title reveal reveal-delay-1">
+        National Broadcasting Company, Nueva York
+      </h2>
+      <span class="gold-line reveal reveal-delay-1"></span>
+      <div class="slide-body reveal reveal-delay-2">
+        <p>
+          Finalizamos esta sección con este impresionante escenario de Nueva York.
+          En el pie de foto de la revista podemos leer:
+        </p>
+        <p>
+          <em>«Gigantesco estudio, recientemente inaugurado, que se asemeja por su
+          forma y dimensiones a las modernas salas de espectáculos.»</em>
+        </p>
+        <p>
+          El éxito de la radio se muestra de forma definitiva a mediados de la
+          década de 1930 con espacios propios de las grandes salas de conciertos.
+        </p>
+      </div>
+      <div class="slide-caption reveal reveal-delay-3">
+        <div class="slide-caption-text">
+          Estudio NBC, Nueva York · <em>Ondas</em>, 24 ago. 1935
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     CODA / FOOTER CTA
+══════════════════════════════════════════ -->
+<section id="coda">
+  <div class="coda-inner">
+    <div class="coda-icon reveal">◈</div>
+    <h2 class="coda-title reveal reveal-delay-1">
+      Descubrir más imágenes<br>de estudios radiofónicos
+    </h2>
+    <p class="coda-body reveal reveal-delay-2">
+      Os animamos a explorar nuestro repositorio de imágenes de <em>Ondas</em>
+      buscando con la palabra clave <strong>«estudio»</strong> y descubrir
+      otros estudios internacionales: Radio-Toulouse, EE.UU., Budapest,
+      Londres o Leipzig.
+    </p>
+    <a href="https://leximususal.github.io/ondas-exposicion/"
+       class="coda-link reveal reveal-delay-3" target="_blank" rel="noopener">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M8 2.5l5 5.5-5 5.5M3 8h10"/>
+      </svg>
+      Explorar el repositorio
+    </a>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════ -->
+<footer>
+  <div class="footer-left">
+    <strong>LexiMus · Universidad de Salamanca</strong>
+    Léxico y ontología de la música en español<br>
+    PID2022-139589NB-C33
+  </div>
+  <div class="footer-right">
+    Fuente: Revista <em>Ondas</em>, Hemeroteca Nacional de España<br>
+    Itinerario 1 de 5 · Espacios Invisibles
+  </div>
+</footer>
+
+<script>
+  /* ── Progress bar ── */
+  const progressBar = document.getElementById('progress-bar');
+  function updateProgress() {
+    const scrollTop    = window.scrollY;
+    const docHeight    = document.documentElement.scrollHeight - window.innerHeight;
+    const pct          = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = pct + '%';
+  }
+
+  /* ── Dot navigation ── */
+  const dots    = document.querySelectorAll('.dot');
+  const sections = ['hero','intro','slide-001','slide-002','slide-003',
+                    'slide-004','slide-005','slide-006','slide-007','coda'];
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const el = document.getElementById(dot.dataset.target);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  function updateActiveDot() {
+    const mid = window.scrollY + window.innerHeight * 0.4;
+    let active = 0;
+    sections.forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (el && el.offsetTop <= mid) active = i;
+    });
+    dots.forEach((d, i) => d.classList.toggle('active', i === active));
+  }
+
+  /* ── Reveal on scroll ── */
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer  = new IntersectionObserver(
+    entries => entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    }),
+    { threshold: 0.12 }
+  );
+  revealEls.forEach(el => observer.observe(el));
+
+  /* ── Combined scroll handler ── */
+  window.addEventListener('scroll', () => {
+    updateProgress();
+    updateActiveDot();
+  }, { passive: true });
+
+  /* Initial call */
+  updateProgress();
+  updateActiveDot();
+
+  /* Trigger hero reveals immediately */
+  document.querySelectorAll('#hero .reveal').forEach((el, i) => {
+    setTimeout(() => el.classList.add('visible'), i * 180);
+  });
+</script>
+</body>
+</html>
